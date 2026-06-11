@@ -1,0 +1,79 @@
+export type CategoryId =
+  | 'XYZ'
+  | 'KVA'
+  | 'NOG'
+  | 'DTK'
+  | 'ORD'
+  | 'LÄS'
+  | 'ELF'
+  | 'MEK';
+
+export type Difficulty = 'Bas' | 'Medel' | 'Svår';
+
+export type TestPart = 'kvantitativ' | 'verbal';
+
+export type Tempo = 'standard' | 'lugn';
+
+export interface Question {
+  id: string;
+  category: CategoryId;
+  /** Kort text/diagrambeskrivning som visas före frågan (LÄS, ELF, DTK). */
+  passage?: string;
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  explanation: string;
+  difficulty: Difficulty;
+}
+
+export interface CategoryMeta {
+  id: CategoryId;
+  name: string;
+  description: string;
+  part: TestPart;
+  /** Rekommenderad tid per fråga i sekunder (standardtempo på provet). */
+  secondsPerQuestion: number;
+  color: string;
+}
+
+export interface AnsweredQuestion {
+  questionId: string;
+  category: CategoryId;
+  /** null = obesvarad (t.ex. när tiden tog slut). */
+  selected: string | null;
+  correct: boolean;
+  timeSpentSec: number;
+}
+
+export interface SessionRecord {
+  id: string;
+  category: CategoryId;
+  startedAt: string; // ISO-datum
+  /** Planerat antal frågor i sessionen. */
+  questionCount: number;
+  answered: AnsweredQuestion[];
+  correctCount: number;
+  timed: boolean;
+  tempo: Tempo;
+  timeLimitSec: number | null;
+  /** Aktiv svarstid i sekunder (pausas medan förklaringar läses). */
+  totalTimeSec: number;
+  timedOut: boolean;
+  /** True om alla frågor besvarades. */
+  completed: boolean;
+}
+
+export interface SessionConfig {
+  category: CategoryId;
+  questionCount: number;
+  timed: boolean;
+  tempo: Tempo;
+}
+
+export interface Profile {
+  name: string;
+  avatar?: string; // dataURL
+  goalScore: number; // 0.0–2.0
+}
+
+export type Theme = 'light' | 'dark';

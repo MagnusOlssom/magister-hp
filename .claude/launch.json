@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hpfokus-dev",
+      "runtimeExecutable": "/Users/magnus/Claude/.tools/node-v22.14.0-darwin-arm64/bin/npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/magnus/Claude/hogskoleprovet-app",
+      "port": 5173
+    }
+  ]
+}

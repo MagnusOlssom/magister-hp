@@ -17,6 +17,7 @@ import {
 } from '../components/icons';
 import { useApp } from '../context/AppContext';
 import { CATEGORY_MAP } from '../data/categories';
+import { FACULTY_MAP } from '../data/faculties';
 import { formatDateTime, formatDuration, formatPercent, formatScore } from '../utils/format';
 import { calculatePrognosis } from '../utils/prognosis';
 import { getBestAndWeakest, getCategoryStats, getOverallStats } from '../utils/stats';
@@ -47,6 +48,12 @@ export default function Dashboard() {
       <section className="hero card">
         <div className="hero__text">
           <h1 className="hero__title">{welcome} 👋</h1>
+          {profile.faculty && (
+            <p className="hero__faculty">
+              <span aria-hidden="true">{FACULTY_MAP[profile.faculty].emoji}</span> Du representerar{' '}
+              <strong>{FACULTY_MAP[profile.faculty].name}</strong>
+            </p>
+          )}
           {prognosis ? (
             <>
               <p className="hero__prognosis">

@@ -4,7 +4,8 @@ import type { Question, SessionRecord } from '../types';
 import { formatDuration, formatPercent } from '../utils/format';
 import CategoryBadge from './CategoryBadge';
 import ProgressRing from './ProgressRing';
-import { IconArrowRight, IconCheck, IconHome, IconRestart, IconX } from './icons';
+import QuestionReview from './QuestionReview';
+import { IconArrowRight, IconCheck, IconHome, IconRestart } from './icons';
 
 interface Props {
   record: SessionRecord;
@@ -32,8 +33,8 @@ export default function SessionSummary({ record, questions, onRetry, onNewCatego
   const accuracy = answeredCount > 0 ? record.correctCount / answeredCount : null;
   const avgTime = answeredCount > 0 ? record.totalTimeSec / answeredCount : null;
   const unanswered = questions.slice(answeredCount);
-  const wrongAnswers = record.answered.filter((a) => !a.correct);
-  const questionById = new Map(questions.map((q) => [q.id, q]));
+  const allCorrect =
+    record.correctCount === answeredCount && answeredCount > 0 && unanswered.length === 0;
 
   return (
     <div className="summary">
@@ -97,54 +98,13 @@ export default function SessionSummary({ record, questions, onRetry, onNewCatego
         <p className="suggestion__text">{getSuggestion(record, accuracy)}</p>
       </div>
 
-      {wrongAnswers.length > 0 && (
-        <section className="summary__section">
-          <h3 className="section-title">
-            <IconX size={18} /> Frågor du svarade fel på ({wrongAnswers.length})
-          </h3>
-          <div className="review-list">
-            {wrongAnswers.map((a) => {
-              const q = questionById.get(a.questionId);
-              if (!q) return null;
-              return (
-                <div key={a.questionId} className="review-item card">
-                  <p className="review-item__question">{q.question}</p>
-                  <p className="review-item__row review-item__row--wrong">
-                    <IconX size={16} /> Ditt svar: {a.selected}
-                  </p>
-                  <p className="review-item__row review-item__row--right">
-                    <IconCheck size={16} /> Rätt svar: {q.correctAnswer}
-                  </p>
-                  <p className="review-item__explanation">{q.explanation}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {wrongAnswers.length === 0 && answeredCount > 0 && unanswered.length === 0 && (
+      {allCorrect && (
         <div className="card all-correct">
           <IconCheck size={22} /> Alla rätt – perfekt session!
         </div>
       )}
 
-      {unanswered.length > 0 && (
-        <section className="summary__section">
-          <h3 className="section-title">Obesvarade frågor ({unanswered.length})</h3>
-          <div className="review-list">
-            {unanswered.map((q) => (
-              <div key={q.id} className="review-item card">
-                <p className="review-item__question">{q.question}</p>
-                <p className="review-item__row review-item__row--right">
-                  <IconCheck size={16} /> Rätt svar: {q.correctAnswer}
-                </p>
-                <p className="review-item__explanation">{q.explanation}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      <QuestionReview questions={questions} answered={record.answered} meta={meta} />
 
       <div className="summary__actions">
         <button type="button" className="btn btn--primary btn--lg" onClick={onRetry}>

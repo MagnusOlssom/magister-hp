@@ -1480,46 +1480,112 @@ button {
   gap: 12px;
 }
 
-.review-list {
+/* Frågevis granskning efter passet */
+.review-nav {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
-.review-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px 18px;
-}
-
-.review-item__question {
-  font-weight: 600;
-  white-space: pre-line;
-}
-
-.review-item__row {
-  display: flex;
+.review-nav__item {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
+  gap: 5px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg-card);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-2);
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease,
+    transform 0.1s ease;
 }
 
-.review-item__row--wrong {
-  color: var(--danger);
+.review-nav__item:hover {
+  transform: translateY(-1px);
 }
 
-.review-item__row--right {
+.review-nav__num {
+  font-variant-numeric: tabular-nums;
+}
+
+.review-nav__item--correct {
+  border-color: color-mix(in srgb, var(--success) 45%, transparent);
+  background: var(--success-soft);
   color: var(--success);
 }
 
-.review-item__explanation {
-  font-size: 13.5px;
+.review-nav__item--wrong {
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.review-nav__item--timeout {
+  border-color: color-mix(in srgb, var(--warning) 45%, transparent);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.review-nav__item--active {
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px currentColor;
+}
+
+.review-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+}
+
+.review-detail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.review-detail__counter {
+  font-weight: 700;
+  font-size: 14px;
   color: var(--text-2);
-  border-top: 1px solid var(--border);
-  padding-top: 8px;
-  margin-top: 4px;
+}
+
+.review-detail__question {
+  font-weight: 600;
+  font-size: 16px;
+  white-space: pre-line;
+}
+
+.options--readonly .option-btn {
+  cursor: default;
+}
+
+.review-detail__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.feedback--timeout {
+  background: var(--warning-soft);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
+}
+
+.feedback--timeout .feedback__headline {
+  color: var(--warning);
+}
+
+.feedback__answer--wrong {
+  color: var(--danger);
+}
+
+.feedback__time {
+  color: var(--text-3);
+  font-weight: 500;
 }
 
 .all-correct {

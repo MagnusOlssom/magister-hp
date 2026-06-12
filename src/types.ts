@@ -70,10 +70,38 @@ export interface SessionConfig {
   tempo: Tempo;
 }
 
+export type FacultyId =
+  | 'medicin'
+  | 'juridik'
+  | 'ekonomi'
+  | 'teknik'
+  | 'naturvetenskap'
+  | 'humaniora'
+  | 'samhallsvetenskap'
+  | 'lararutbildning'
+  | 'psykologi'
+  | 'konst'
+  | 'annan';
+
+export interface FacultyMeta {
+  id: FacultyId;
+  name: string;
+  /** Kort namn för trånga ytor, t.ex. "Medicin". */
+  shortName: string;
+  emoji: string;
+  color: string;
+  /** Kaxigt motto som visas vid invigningen och på profilen. */
+  motto: string;
+  description: string;
+}
+
 export interface Profile {
   name: string;
   avatar?: string; // dataURL
   goalScore: number; // 0.0–2.0
+  faculty?: FacultyId;
+  /** True när välkomstflödet är genomfört (eller överhoppat). */
+  onboarded?: boolean;
 }
 
 export type Theme = 'light' | 'dark';

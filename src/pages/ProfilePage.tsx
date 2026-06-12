@@ -1,9 +1,11 @@
 import { useMemo, useRef, useState, type ChangeEvent } from 'react';
 import Avatar from '../components/Avatar';
+import FacultyPicker from '../components/FacultyPicker';
 import Modal from '../components/Modal';
 import StatCard from '../components/StatCard';
 import { IconFlag, IconPencil, IconTarget, IconTrash } from '../components/icons';
 import { useApp } from '../context/AppContext';
+import { FACULTY_MAP } from '../data/faculties';
 import { formatPercent, formatScore } from '../utils/format';
 import { clamp } from '../utils/helpers';
 import { fileToAvatar } from '../utils/image';
@@ -125,6 +127,36 @@ export default function ProfilePage() {
         <p className={`saved-flash${savedFlash ? ' saved-flash--visible' : ''}`} aria-live="polite">
           Sparat ✓
         </p>
+      </section>
+
+      <section className="card faculty-section">
+        <h2 className="section-title">Min fakultet</h2>
+        {profile.faculty ? (
+          <div
+            className="faculty-banner"
+            style={{ '--faculty-color': FACULTY_MAP[profile.faculty].color } as React.CSSProperties}
+          >
+            <span className="faculty-banner__emoji" aria-hidden="true">
+              {FACULTY_MAP[profile.faculty].emoji}
+            </span>
+            <div>
+              <div className="faculty-banner__name">{FACULTY_MAP[profile.faculty].name}</div>
+              <div className="faculty-banner__motto">”{FACULTY_MAP[profile.faculty].motto}”</div>
+            </div>
+          </div>
+        ) : (
+          <p className="goal-card__hint">
+            Välj vilken fakultet du representerar – inför framtida fakultetstävlingar!
+          </p>
+        )}
+        <FacultyPicker
+          compact
+          value={profile.faculty}
+          onChange={(faculty) => {
+            updateProfile({ faculty });
+            flashSaved();
+          }}
+        />
       </section>
 
       <section className="card goal-card">

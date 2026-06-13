@@ -2,11 +2,12 @@ import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Avatar from './Avatar';
 import DarkModeToggle from './DarkModeToggle';
-import { IconChart, IconClock, IconHome, IconPlay, IconUser } from './icons';
+import { IconChart, IconClock, IconHome, IconPlay, IconSparkle, IconUser } from './icons';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Översikt', icon: IconHome, end: true },
   { to: '/trana', label: 'Träna', icon: IconPlay, end: false },
+  { to: '/analys', label: 'Analys', icon: IconSparkle, end: false },
   { to: '/historik', label: 'Historik', icon: IconClock, end: false },
   { to: '/statistik', label: 'Statistik', icon: IconChart, end: false },
   { to: '/profil', label: 'Profil', icon: IconUser, end: false },

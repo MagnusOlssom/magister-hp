@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Onboarding from './components/Onboarding';
 import { AppProvider, useApp } from './context/AppContext';
+import AnalysisPage from './pages/AnalysisPage';
 import Dashboard from './pages/Dashboard';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
@@ -16,6 +17,7 @@ function AppRoutes() {
       <Route element={<Layout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/trana" element={<TrainPage />} />
+        <Route path="/analys" element={<AnalysisPage />} />
         <Route path="/historik" element={<HistoryPage />} />
         <Route path="/statistik" element={<StatisticsPage />} />
         <Route path="/profil" element={<ProfilePage />} />

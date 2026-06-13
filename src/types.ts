@@ -102,6 +102,8 @@ export interface Profile {
   faculty?: FacultyId;
   /** True när välkomstflödet är genomfört (eller överhoppat). */
   onboarded?: boolean;
+  /** Valfritt måldatum för provet (ISO yyyy-mm-dd) – används av Coach Jens. */
+  examDate?: string;
 }
 
 export type Theme = 'light' | 'dark';

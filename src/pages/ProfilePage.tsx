@@ -124,6 +124,20 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        <label className="field">
+          <span className="field__label">Provdatum (valfritt)</span>
+          <input
+            type="date"
+            className="field__input"
+            value={profile.examDate ?? ''}
+            onChange={(e) => updateProfile({ examDate: e.target.value || undefined })}
+            onBlur={flashSaved}
+          />
+          <span className="field__hint">
+            Anger du när du ska skriva provet anpassar Coach Jens sina råd efter hur nära det är.
+          </span>
+        </label>
+
         <p className={`saved-flash${savedFlash ? ' saved-flash--visible' : ''}`} aria-live="polite">
           Sparat ✓
         </p>

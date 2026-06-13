@@ -151,3 +151,17 @@ export const IconZap = (p: IconProps) => (
     <path d="M13 2 4 14h6l-1 8 9-12h-6z" />
   </svg>
 );
+
+export const IconSparkle = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <path d="M12 3c.5 3.5 2 5 5.5 5.5C14 9 12.5 10.5 12 14c-.5-3.5-2-5-5.5-5.5C10 8 11.5 6.5 12 3z" />
+    <path d="M18.5 14c.3 1.8 1 2.5 2.8 2.8-1.8.3-2.5 1-2.8 2.8-.3-1.8-1-2.5-2.8-2.8 1.8-.3 2.5-1 2.8-2.8z" />
+  </svg>
+);
+
+export const IconLock = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+    <path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" />
+  </svg>
+);

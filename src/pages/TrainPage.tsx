@@ -37,7 +37,9 @@ export default function TrainPage() {
   const validParam =
     paramCategory && paramCategory in CATEGORY_MAP ? (paramCategory as CategoryId) : null;
   // Djuplänk: /trana?kategori=XYZ&start=1 startar direkt med standardinställningar.
+  // tid=0 ger ett otajmat pass (Coach Jens noggrannhetsträning).
   const autoStart = validParam !== null && searchParams.get('start') === '1';
+  const autoTimed = searchParams.get('tid') !== '0';
 
   const [step, setStep] = useState<Step>(
     validParam ? (autoStart ? 'session' : 'settings') : 'category',
@@ -48,7 +50,7 @@ export default function TrainPage() {
       ? buildSession({
           category: validParam,
           questionCount: Math.min(10, poolSize(validParam)),
-          timed: true,
+          timed: autoTimed,
           tempo: 'standard',
         })
       : null,

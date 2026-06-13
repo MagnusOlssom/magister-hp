@@ -10,6 +10,7 @@ import {
   IconFlag,
   IconPencil,
   IconPlay,
+  IconSparkle,
   IconTarget,
   IconTrendingDown,
   IconTrophy,
@@ -18,6 +19,12 @@ import {
 import { useApp } from '../context/AppContext';
 import { CATEGORY_MAP } from '../data/categories';
 import { FACULTY_MAP } from '../data/faculties';
+import {
+  buildCoachAnalysis,
+  COACH_NAME,
+  getUnlockProgress,
+  UNLOCK_PER_SUBTEST,
+} from '../utils/coach';
 import { formatDateTime, formatDuration, formatPercent, formatScore } from '../utils/format';
 import { calculatePrognosis } from '../utils/prognosis';
 import { getBestAndWeakest, getCategoryStats, getOverallStats } from '../utils/stats';
@@ -29,6 +36,11 @@ export default function Dashboard() {
   const categoryStats = useMemo(() => getCategoryStats(sessions), [sessions]);
   const { best, weakest } = useMemo(() => getBestAndWeakest(categoryStats), [categoryStats]);
   const prognosis = useMemo(() => calculatePrognosis(sessions), [sessions]);
+  const unlock = useMemo(() => getUnlockProgress(sessions), [sessions]);
+  const coachPreview = useMemo(
+    () => (unlock.unlocked ? buildCoachAnalysis(sessions, profile, Date.now()) : null),
+    [sessions, profile, unlock.unlocked],
+  );
 
   const firstName = profile.name.trim().split(/\s+/)[0] ?? '';
   const hasSessions = sessions.length > 0;
@@ -104,6 +116,49 @@ export default function Dashboard() {
           </ProgressRing>
         </div>
       </section>
+
+      {hasSessions && (
+        <section className="card coach-card">
+          <div className="coach-card__head">
+            <span className="coach-badge coach-badge--md" aria-hidden="true">
+              <IconSparkle size={18} />
+            </span>
+            <span className="coach-card__who">Coach {COACH_NAME}</span>
+            <Link to="/analys" className="inline-link coach-card__link">
+              {coachPreview ? 'Visa analys' : 'Till analysen'} <IconArrowRight size={14} />
+            </Link>
+          </div>
+          {coachPreview ? (
+            <>
+              <p className="coach-card__headline">{coachPreview.headline}</p>
+              {coachPreview.recommendations[0] && (
+                <Link to={coachPreview.recommendations[0].href} className="coach-card__rec">
+                  <IconSparkle size={15} />
+                  <span>{coachPreview.recommendations[0].title}</span>
+                  <IconArrowRight size={15} />
+                </Link>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="coach-card__headline">
+                {COACH_NAME} förbereder din första analys – {unlock.completed} av {unlock.total}{' '}
+                delprov klara.
+              </p>
+              <p className="coach-card__sub">
+                Gör minst {UNLOCK_PER_SUBTEST} övningar i varje delprov så låser du upp din
+                personliga HP-analys.
+              </p>
+              <div className="bar-track">
+                <div
+                  className="bar-fill bar-fill--gradient"
+                  style={{ width: `${Math.round((unlock.completed / unlock.total) * 100)}%` }}
+                />
+              </div>
+            </>
+          )}
+        </section>
+      )}
 
       <div className="stat-grid">
         <StatCard

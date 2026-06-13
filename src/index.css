@@ -2341,3 +2341,367 @@ button {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
+
+/* ------------------------------------------------------------
+   Coach Jens (Analys)
+   ------------------------------------------------------------ */
+
+.field__hint {
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+.btn--sm {
+  padding: 7px 13px;
+  font-size: 13.5px;
+  border-radius: var(--radius-sm);
+}
+
+.pill--timed {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.pill--untimed {
+  background: var(--bg-subtle);
+  color: var(--text-2);
+}
+
+.coach-badge {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--hero-gradient);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.coach-badge--md {
+  width: 34px;
+  height: 34px;
+}
+
+.coach-badge--lg {
+  width: 48px;
+  height: 48px;
+}
+
+.coach-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Låst läge */
+.coach-locked {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 30px 24px;
+}
+
+.coach-locked__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.coach-locked__title {
+  font-size: 20px;
+}
+
+.coach-locked__text {
+  color: var(--text-2);
+  max-width: 46ch;
+  font-size: 14.5px;
+}
+
+.coach-locked__progress {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 6px;
+}
+
+.coach-locked__count {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.coach-locked__count strong {
+  font-size: 18px;
+  color: var(--primary);
+}
+
+.coach-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.coach-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.coach-row--done {
+  opacity: 0.7;
+}
+
+.coach-row__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.coach-row__name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.coach-row__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.coach-row__check {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--success-soft);
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+/* Upplåst – status */
+.coach-status {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.coach-status__score {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.coach-status__label {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.coach-status__facts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.coach-status__fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14.5px;
+  color: var(--text-2);
+}
+
+.coach-status__fact strong {
+  color: var(--text);
+}
+
+/* Upplåst – analystext */
+.coach-analysis__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.coach-analysis__who {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.coach-analysis__headline {
+  font-size: 16.5px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.coach-obs {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.coach-obs__item {
+  position: relative;
+  padding: 9px 12px 9px 32px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: var(--bg-subtle);
+}
+
+.coach-obs__item::before {
+  position: absolute;
+  left: 11px;
+  top: 9px;
+  font-size: 13px;
+}
+
+.coach-obs__item--positive {
+  background: var(--success-soft);
+}
+.coach-obs__item--positive::before {
+  content: '▲';
+  color: var(--success);
+}
+
+.coach-obs__item--warning {
+  background: var(--warning-soft);
+}
+.coach-obs__item--warning::before {
+  content: '!';
+  font-weight: 800;
+  color: var(--warning);
+  left: 14px;
+}
+
+.coach-obs__item--neutral::before {
+  content: 'i';
+  font-style: italic;
+  font-weight: 700;
+  color: var(--text-3);
+  left: 14px;
+}
+
+/* Upplåst – rekommendationer */
+.coach-recs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.coach-rec {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  border-left: 4px solid var(--primary);
+}
+
+.coach-rec__rank {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.coach-rec__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.coach-rec__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.coach-rec__title {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.coach-rec__reason {
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+/* Dashboard-sektion */
+.coach-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.coach-card__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.coach-card__who {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.coach-card__link {
+  margin-left: auto;
+}
+
+.coach-card__headline {
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.coach-card__sub {
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.coach-card__rec {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.coach-card__rec span {
+  flex: 1;
+}
+
+.coach-card__rec:hover {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+@media (max-width: 640px) {
+  .coach-status {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+}

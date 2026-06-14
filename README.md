@@ -1,8 +1,9 @@
-# HPfokus – träna inför högskoleprovet
+# Magister HP – träna inför högskoleprovet
 
 En modern, responsiv webbapp för att öva inför högskoleprovet. Träna alla åtta
 delprov (XYZ, KVA, NOG, DTK, ORD, LÄS, ELF, MEK), följ din utveckling med
-statistik och få en löpande prognos av ditt resultat på skalan 0,0–2,0.
+statistik, få en löpande prognos av ditt resultat på skalan 0,0–2,0 och en
+personlig analys av Coach Jens.
 
 Byggd med **React 18 + TypeScript + Vite**. All data sparas lokalt i
 webbläsaren (localStorage) – ingen backend behövs.
@@ -104,8 +105,9 @@ För KVA och NOG används de fasta standardalternativen (`KVA_OPTIONS` /
 ## Lagring
 
 All användardata sparas i localStorage under nycklarna `hpfokus:sessions`,
-`hpfokus:profile` och `hpfokus:theme`. Rensa via profilsidan ("Återställ all
-data") eller webbläsarens utvecklarverktyg.
+`hpfokus:profile` och `hpfokus:theme` (prefixet behålls oförändrat sedan
+tidigare så att redan sparad data följer med efter namnbytet). Rensa via
+profilsidan ("Återställ all data") eller webbläsarens utvecklarverktyg.
 
 > **Obs!** Frågorna i appen är egenskrivna övningsexempel i högskoleprovets
 > stil – inte officiella provfrågor.

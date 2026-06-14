@@ -1,6 +1,7 @@
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import Avatar from './Avatar';
+import BrandMark from './BrandMark';
 import DarkModeToggle from './DarkModeToggle';
 import { IconChart, IconClock, IconHome, IconPlay, IconSparkle, IconUser } from './icons';
 
@@ -15,10 +16,12 @@ const NAV_ITEMS = [
 
 function Logo() {
   return (
-    <Link to="/" className="logo" aria-label="HPfokus – till översikten">
-      <span className="logo__mark">HP</span>
+    <Link to="/" className="logo" aria-label="Magister HP – till översikten">
+      <span className="logo__mark">
+        <BrandMark size={24} />
+      </span>
       <span className="logo__text">
-        HPfokus
+        Magister HP
         <span className="logo__tagline">Träna inför högskoleprovet</span>
       </span>
     </Link>

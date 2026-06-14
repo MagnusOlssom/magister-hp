@@ -2895,3 +2895,110 @@ button {
     padding: 6px 10px;
   }
 }
+
+/* ------------------------------------------------------------
+   Analys: rekommendationer i analyskortet + schemajusteringar
+   ------------------------------------------------------------ */
+
+.coach-analysis__recs {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.coach-analysis__recs-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+  margin-bottom: 12px;
+}
+
+/* coach-rec används nu utan .card – ge egen yta */
+.coach-rec {
+  background: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+}
+
+/* Pluggtid – medveten editor i stället för slider */
+.schedule-time__value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.schedule-time__tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+  background: var(--bg-subtle);
+  border-radius: 999px;
+  padding: 2px 8px;
+  letter-spacing: 0.02em;
+}
+
+.time-editor {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-editor__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preset-chip {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-strong);
+  background: var(--bg-card);
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--text-2);
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.preset-chip:hover {
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+.preset-chip--active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.preset-chip--reco {
+  border-style: dashed;
+}
+
+/* Nytillagd uppgift i schemat */
+.task-chip--new {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.task-chip--new:hover {
+  background: color-mix(in srgb, var(--warning) 22%, transparent);
+}
+
+.task-chip__badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--warning);
+  color: #fff;
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+[data-theme='dark'] .task-chip__badge {
+  color: #2a1c00;
+}

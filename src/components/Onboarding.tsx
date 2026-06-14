@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { FACULTY_MAP } from '../data/faculties';
 import type { FacultyId } from '../types';
 import { formatScore } from '../utils/format';
+import BrandMark from './BrandMark';
 import FacultyPicker from './FacultyPicker';
 import { IconArrowLeft, IconArrowRight } from './icons';
 
@@ -33,7 +34,7 @@ export default function Onboarding() {
   };
 
   return (
-    <div className="onboarding" role="dialog" aria-modal="true" aria-label="Kom igång med HPfokus">
+    <div className="onboarding" role="dialog" aria-modal="true" aria-label="Kom igång med Magister HP">
       <div
         className={`onboarding__panel${step === 'celebration' ? ' onboarding__panel--celebration' : ''}`}
         style={
@@ -45,7 +46,10 @@ export default function Onboarding() {
         {step !== 'celebration' && (
           <>
             <div className="onboarding__brand">
-              <span className="logo__mark">HP</span> HPfokus
+              <span className="logo__mark">
+                <BrandMark size={22} />
+              </span>{' '}
+              Magister HP
             </div>
             <div className="onboarding__dots" aria-hidden="true">
               {STEP_ORDER.map((s, i) => (
@@ -62,7 +66,7 @@ export default function Onboarding() {
           <div className="onboarding__step">
             <h1 className="onboarding__title">Välkommen! 👋</h1>
             <p className="onboarding__sub">
-              HPfokus hjälper dig träna inför högskoleprovet. Vad ska vi kalla dig?
+              Magister HP hjälper dig träna inför högskoleprovet. Vad ska vi kalla dig?
             </p>
             <input
               type="text"

@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
   sessions: `${PREFIX}sessions`,
   profile: `${PREFIX}profile`,
   theme: `${PREFIX}theme`,
+  schedule: `${PREFIX}schedule`,
 } as const;
 
 export function loadFromStorage<T>(key: string, fallback: T): T {

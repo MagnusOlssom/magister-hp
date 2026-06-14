@@ -1,6 +1,7 @@
 import { CATEGORIES, CATEGORY_MAP, KVANT_CATEGORIES, VERBAL_CATEGORIES } from '../data/categories';
 import type { CategoryId, Profile, SessionRecord } from '../types';
 import { calculatePrognosis, type PrognosisResult } from './prognosis';
+import { getCategoryStats } from './stats';
 
 /**
  * Coach Jens v1 – regelbaserad analysmotor.
@@ -167,13 +168,16 @@ export interface CoachAnalysis {
   prognosis: PrognosisResult | null;
   headline: string;
   observations: Observation[];
+  /** Topp 3 till panelen "Coach rekommenderar". */
   recommendations: Recommendation[];
+  /** Hela den rankade listan – veckoschemat bygger på denna (samma källa). */
+  allRecommendations: Recommendation[];
   strongest: CategoryId | null;
   weakest: CategoryId | null;
   examDaysLeft: number | null;
 }
 
-function hrefFor(category: CategoryId, kind: RecKind): string {
+export function hrefFor(category: CategoryId, kind: RecKind): string {
   return `/trana?kategori=${encodeURIComponent(category)}&start=1${kind === 'untimed' ? '&tid=0' : ''}`;
 }
 
@@ -358,13 +362,15 @@ export function buildCoachAnalysis(
     );
   }
 
-  // Dedupa per delprov, prioritetsordna, max 3.
+  // Dedupa per delprov och prioritetsordna. allRecommendations = hela rankade
+  // listan (delas med veckoschemat så att schema och topp-3 aldrig kan säga emot
+  // varandra), recommendations = topp 3 till panelen "Coach rekommenderar".
   const seen = new Set<CategoryId>();
-  const recommendations = cands
+  const allRecommendations = cands
     .sort((a, b) => b.priority - a.priority)
     .filter((c) => (seen.has(c.category) ? false : (seen.add(c.category), true)))
-    .slice(0, 3)
     .map(({ priority: _priority, ...rec }) => rec);
+  const recommendations = allRecommendations.slice(0, 3);
 
   // -------------------------------------------------------------- Observationer
   const observations: Observation[] = [];
@@ -444,5 +450,49 @@ export function buildCoachAnalysis(
     headline = `${COACH_NAME} behöver mer data innan han kan ge en träffsäker analys.`;
   }
 
-  return { prognosis, headline, observations, recommendations, strongest, weakest, examDaysLeft };
+  return {
+    prognosis,
+    headline,
+    observations,
+    recommendations,
+    allRecommendations,
+    strongest,
+    weakest,
+    examDaysLeft,
+  };
+}
+
+/**
+ * Bredare backlog för veckoschemat: de högt prioriterade rekommendationerna
+ * först (samma källa som "Coach rekommenderar"), därefter ett pass per
+ * kvalificerat delprov, svagast först – så att en hel vecka får variation och
+ * täcker fler delar utan att säga emot rekommendationerna.
+ */
+export function buildWeeklyMenu(
+  analysis: CoachAnalysis,
+  sessions: SessionRecord[],
+): Recommendation[] {
+  const menu = analysis.allRecommendations.slice();
+  const seen = new Set<CategoryId>(menu.map((r) => r.category));
+  const examNear =
+    analysis.examDaysLeft !== null && analysis.examDaysLeft >= 0 && analysis.examDaysLeft <= 30;
+  const kind: RecKind = examNear ? 'timed' : 'untimed';
+
+  const weakestFirst = getCategoryStats(sessions)
+    .filter((s) => s.answered >= UNLOCK_PER_SUBTEST && s.accuracy !== null)
+    .sort((a, b) => a.accuracy! - b.accuracy!);
+
+  for (const s of weakestFirst) {
+    if (seen.has(s.category)) continue;
+    seen.add(s.category);
+    menu.push({
+      id: `${s.category}-${kind}`,
+      category: s.category,
+      kind,
+      title: titleFor(s.category, kind),
+      reason: '',
+      href: hrefFor(s.category, kind),
+    });
+  }
+  return menu;
 }

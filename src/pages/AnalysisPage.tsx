@@ -166,36 +166,37 @@ function UnlockedState({
             ))}
           </ul>
         )}
+
+        {recommendations.length > 0 && (
+          <div className="coach-analysis__recs">
+            <h3 className="coach-analysis__recs-title">
+              <IconSparkle size={16} /> {COACH_NAME} rekommenderar härnäst
+            </h3>
+            <div className="coach-recs">
+              {recommendations.map((rec, i) => (
+                <div key={rec.id} className="coach-rec">
+                  <span className="coach-rec__rank">{i + 1}</span>
+                  <div className="coach-rec__body">
+                    <div className="coach-rec__title-row">
+                      <CategoryBadge category={rec.category} size="sm" />
+                      <span className="coach-rec__title">{rec.title}</span>
+                      <span className={`pill pill--${rec.kind === 'timed' ? 'timed' : 'untimed'}`}>
+                        {rec.kind === 'timed' ? 'Med tid' : 'Utan tid'}
+                      </span>
+                    </div>
+                    <p className="coach-rec__reason">{rec.reason}</p>
+                    <Link to={rec.href} className="btn btn--primary btn--sm">
+                      Starta nu <IconArrowRight size={16} />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       <WeekSchedule />
-
-      <section className="summary__section">
-        <h2 className="section-title">
-          <IconSparkle size={18} /> {COACH_NAME} rekommenderar just nu
-          {recommendations.length > 1 ? ` (${recommendations.length} steg)` : ''}
-        </h2>
-        <div className="coach-recs">
-          {recommendations.map((rec, i) => (
-            <div key={rec.id} className="card coach-rec">
-              <span className="coach-rec__rank">{i + 1}</span>
-              <div className="coach-rec__body">
-                <div className="coach-rec__title-row">
-                  <CategoryBadge category={rec.category} size="sm" />
-                  <span className="coach-rec__title">{rec.title}</span>
-                  <span className={`pill pill--${rec.kind === 'timed' ? 'timed' : 'untimed'}`}>
-                    {rec.kind === 'timed' ? 'Med tid' : 'Utan tid'}
-                  </span>
-                </div>
-                <p className="coach-rec__reason">{rec.reason}</p>
-                <Link to={rec.href} className="btn btn--primary btn--sm">
-                  Starta nu <IconArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
     </>
   );
 }

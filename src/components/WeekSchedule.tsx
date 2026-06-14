@@ -8,26 +8,29 @@ import {
   ensureSchedule,
   formatHours,
   type ScheduledTask,
-  type WeekSchedule as WeekScheduleData,
 } from '../utils/schedule';
 
 const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6];
+/** Förvalda pluggtider (minuter) – medvetet diskreta val, inte en slider. */
+const TIME_PRESETS = [60, 120, 180, 240, 300, 360, 480, 600];
 
 export default function WeekSchedule() {
   const { sessions, profile, updateProfile } = useApp();
-  const [draftMinutes, setDraftMinutes] = useState<number | null>(null);
+  const [editingTime, setEditingTime] = useState(false);
 
-  const view = useMemo(
-    () => ensureSchedule(sessions, profile, Date.now()),
-    [sessions, profile],
+  const view = useMemo(() => ensureSchedule(sessions, profile, Date.now()), [sessions, profile]);
+
+  // Frusna veckans uppgifter + nytillagda live-rekommendationer.
+  const currentTasks = useMemo(
+    () => [...view.current.tasks, ...view.newTasks],
+    [view.current.tasks, view.newTasks],
   );
   const doneIds = useMemo(
-    () => computeDoneTaskIds(view.current, sessions),
-    [view.current, sessions],
+    () => computeDoneTaskIds(currentTasks, view.current.weekStartMs, sessions),
+    [currentTasks, view.current.weekStartMs, sessions],
   );
 
   const restDays = profile.restDays ?? [];
-  const sliderValue = draftMinutes ?? view.effectiveMinutes;
 
   const toggleRestDay = (day: number) => {
     const next = restDays.includes(day)
@@ -36,15 +39,13 @@ export default function WeekSchedule() {
     updateProfile({ restDays: next });
   };
 
-  const commitMinutes = () => {
-    if (draftMinutes !== null) {
-      updateProfile({ weeklyStudyMinutes: draftMinutes });
-      setDraftMinutes(null);
-    }
+  const setMinutes = (minutes: number | undefined) => {
+    updateProfile({ weeklyStudyMinutes: minutes });
+    setEditingTime(false);
   };
 
-  const doneCount = view.current.tasks.filter((t) => doneIds.has(t.id)).length;
-  const totalTasks = view.current.tasks.length;
+  const doneCount = currentTasks.filter((t) => doneIds.has(t.id)).length;
+  const totalTasks = currentTasks.length;
 
   return (
     <section className="summary__section">
@@ -52,44 +53,55 @@ export default function WeekSchedule() {
         <IconCalendar size={18} /> Veckans schema
       </h2>
 
-      {/* Inställningar: pluggtid + vilodagar */}
       <div className="card schedule-settings">
         <div className="schedule-time">
           <div className="schedule-time__head">
-            <span className="field__label">Pluggtid den här veckan</span>
-            <span className="schedule-time__value">{formatHours(sliderValue)}</span>
+            <span className="field__label">Pluggtid per vecka</span>
+            <span className="schedule-time__value">
+              {formatHours(view.effectiveMinutes)}
+              {!view.isOverride && <span className="schedule-time__tag">rekommenderat</span>}
+            </span>
           </div>
-          <input
-            type="range"
-            className="field__range"
-            min={60}
-            max={900}
-            step={30}
-            value={sliderValue}
-            onChange={(e) => setDraftMinutes(Number(e.target.value))}
-            onMouseUp={commitMinutes}
-            onTouchEnd={commitMinutes}
-            onKeyUp={commitMinutes}
-            aria-label="Pluggtid per vecka"
-          />
-          <div className="schedule-time__foot">
-            {view.isOverride ? (
+
+          {editingTime ? (
+            <div className="time-editor">
+              <div className="time-editor__presets">
+                {TIME_PRESETS.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    className={`preset-chip${view.isOverride && view.effectiveMinutes === m ? ' preset-chip--active' : ''}`}
+                    onClick={() => setMinutes(m)}
+                  >
+                    {formatHours(m)}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className={`preset-chip preset-chip--reco${!view.isOverride ? ' preset-chip--active' : ''}`}
+                  onClick={() => setMinutes(undefined)}
+                >
+                  Rekommenderat ({formatHours(view.autoMinutes)})
+                </button>
+              </div>
+              <button type="button" className="inline-link" onClick={() => setEditingTime(false)}>
+                Avbryt
+              </button>
+            </div>
+          ) : (
+            <div className="schedule-time__foot">
               <button
                 type="button"
-                className="inline-link"
-                onClick={() => {
-                  updateProfile({ weeklyStudyMinutes: undefined });
-                  setDraftMinutes(null);
-                }}
+                className="btn btn--secondary btn--sm"
+                onClick={() => setEditingTime(true)}
               >
-                Återställ till rekommenderat ({formatHours(view.autoMinutes)})
+                Ändra pluggtid
               </button>
-            ) : (
               <span className="schedule-time__hint">
-                Rekommenderat utifrån ditt mål och din utveckling
+                Ändras sällan – varje ändring uppdaterar veckans schema.
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className="schedule-rest">
@@ -113,7 +125,6 @@ export default function WeekSchedule() {
         </div>
       </div>
 
-      {/* Aktuell vecka */}
       <div className="schedule-progress">
         <span>
           {totalTasks > 0
@@ -133,13 +144,12 @@ export default function WeekSchedule() {
         )}
       </div>
 
-      <WeekGrid week={view.current} restDays={restDays} doneIds={doneIds} />
+      <WeekGrid tasks={currentTasks} restDays={restDays} doneIds={doneIds} />
 
-      {/* Nästa vecka (söndag kväll) */}
       {view.next && (
         <div className="schedule-next">
           <h3 className="schedule-next__title">Nästa vecka – förhandsvisning</h3>
-          <WeekGrid week={view.next} restDays={restDays} doneIds={null} />
+          <WeekGrid tasks={view.next.tasks} restDays={restDays} doneIds={null} />
         </div>
       )}
     </section>
@@ -147,18 +157,18 @@ export default function WeekSchedule() {
 }
 
 function WeekGrid({
-  week,
+  tasks,
   restDays,
   doneIds,
 }: {
-  week: WeekScheduleData;
+  tasks: ScheduledTask[];
   restDays: number[];
   doneIds: Set<string> | null;
 }) {
   return (
     <div className="schedule-grid">
       {ALL_DAYS.map((d) => {
-        const dayTasks = week.tasks.filter((t) => t.day === d);
+        const dayTasks = tasks.filter((t) => t.day === d);
         const isRest = restDays.includes(d);
         return (
           <div key={d} className={`schedule-day${isRest ? ' schedule-day--rest' : ''}`}>
@@ -189,11 +199,15 @@ function WeekGrid({
 
 function TaskChip({ task, done }: { task: ScheduledTask; done: boolean }) {
   return (
-    <Link to={task.href} className={`task-chip${done ? ' task-chip--done' : ''}`}>
+    <Link
+      to={task.href}
+      className={`task-chip${done ? ' task-chip--done' : ''}${task.isNew ? ' task-chip--new' : ''}`}
+    >
       <span className="task-chip__check" aria-hidden="true">
         {done ? <IconCheck size={14} /> : null}
       </span>
       <span className="task-chip__label">{task.label}</span>
+      {task.isNew && !done && <span className="task-chip__badge">Ny</span>}
       {!done && <IconArrowRight size={14} className="task-chip__go" />}
     </Link>
   );

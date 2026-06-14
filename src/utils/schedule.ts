@@ -48,6 +48,8 @@ export interface ScheduledTask {
   estMinutes: number;
   label: string;
   href: string;
+  /** Tillagd i efterhand från en live-rekommendation (visas som "Ny"). */
+  isNew?: boolean;
 }
 
 export interface WeekSchedule {
@@ -63,6 +65,8 @@ export interface WeekView {
   current: WeekSchedule;
   /** Endast söndag kväll från kl 17 – annars null. */
   next: WeekSchedule | null;
+  /** Live-rekommendationer som inte fanns i den frysta planen (markerade "Ny"). */
+  newTasks: ScheduledTask[];
   effectiveMinutes: number;
   autoMinutes: number;
   isOverride: boolean;
@@ -259,9 +263,40 @@ export function ensureSchedule(
 
   if (changed) saveToStorage(STORAGE_KEYS.schedule, store);
 
+  // Live-rekommendationer som inte redan finns i den frysta planen läggs till
+  // som nytillagda uppgifter, så schemat alltid speglar analysens råd.
+  const current = store[curKey];
+  let newTasks: ScheduledTask[] = [];
+  if (unlocked) {
+    const existing = new Set(current.tasks.map((t) => `${t.category}|${t.kind}`));
+    const allDays = [0, 1, 2, 3, 4, 5, 6];
+    const activeDays = allDays.filter((day) => !restDays.includes(day));
+    const days = activeDays.length > 0 ? activeDays : allDays;
+    const todayIdx = (new Date(now).getDay() + 6) % 7;
+    const startAt = days.findIndex((day) => day >= todayIdx);
+    const base = startAt >= 0 ? startAt : 0;
+    newTasks = analysis.recommendations
+      .filter((r) => !existing.has(`${r.category}|${r.kind}`))
+      .map((r, i) => {
+        const { count, est } = taskSize(r.category, r.kind);
+        return {
+          id: `${current.weekKey}-new-${r.category}-${r.kind}`,
+          day: days[(base + i) % days.length],
+          category: r.category,
+          kind: r.kind,
+          questionCount: count,
+          estMinutes: est,
+          label: labelFor(r.category, r.kind, count),
+          href: r.href,
+          isNew: true,
+        };
+      });
+  }
+
   return {
-    current: store[curKey],
+    current,
     next,
+    newTasks,
     effectiveMinutes,
     autoMinutes,
     isOverride: override !== undefined,
@@ -272,8 +307,12 @@ export function ensureSchedule(
  * Avbockning (endast automatisk): en uppgift är klar om det finns ett matchande
  * pass under veckan (rätt delprov + tidsläge). Varje pass räknas för en uppgift.
  */
-export function computeDoneTaskIds(week: WeekSchedule, sessions: SessionRecord[]): Set<string> {
-  const start = week.weekStartMs;
+export function computeDoneTaskIds(
+  tasks: ScheduledTask[],
+  weekStartMs: number,
+  sessions: SessionRecord[],
+): Set<string> {
+  const start = weekStartMs;
   const end = addWeek(start);
   const inWeek = sessions.filter((s) => {
     const t = new Date(s.startedAt).getTime();
@@ -281,7 +320,7 @@ export function computeDoneTaskIds(week: WeekSchedule, sessions: SessionRecord[]
   });
   const used = new Set<string>();
   const done = new Set<string>();
-  for (const task of week.tasks) {
+  for (const task of tasks) {
     const match = inWeek.find(
       (s) => !used.has(s.id) && s.category === task.category && s.timed === (task.kind === 'timed'),
     );

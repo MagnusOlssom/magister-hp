@@ -78,6 +78,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setProfile(DEFAULT_PROFILE);
     removeFromStorage(STORAGE_KEYS.sessions);
     removeFromStorage(STORAGE_KEYS.profile);
+    removeFromStorage(STORAGE_KEYS.schedule);
   }, []);
 
   const toggleTheme = useCallback(() => {

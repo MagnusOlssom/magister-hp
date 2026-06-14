@@ -104,6 +104,10 @@ export interface Profile {
   onboarded?: boolean;
   /** Valfritt måldatum för provet (ISO yyyy-mm-dd) – används av Coach Jens. */
   examDate?: string;
+  /** Egen vald pluggtid per vecka i minuter. Saknas = använd rekommenderad. */
+  weeklyStudyMinutes?: number;
+  /** Vilodagar (0 = måndag … 6 = söndag) då inga uppgifter schemaläggs. */
+  restDays?: number[];
 }
 
 export type Theme = 'light' | 'dark';

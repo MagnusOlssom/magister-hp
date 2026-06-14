@@ -10,6 +10,7 @@ import {
   IconSparkle,
   IconTarget,
 } from '../components/icons';
+import WeekSchedule from '../components/WeekSchedule';
 import { useApp } from '../context/AppContext';
 import { CATEGORY_MAP } from '../data/categories';
 import { buildCoachAnalysis, COACH_NAME, getUnlockProgress, UNLOCK_PER_SUBTEST } from '../utils/coach';
@@ -111,6 +112,8 @@ function LockedState({ unlock }: { unlock: ReturnType<typeof getUnlockProgress> 
           </div>
         ))}
       </section>
+
+      <WeekSchedule />
     </>
   );
 }
@@ -165,9 +168,11 @@ function UnlockedState({
         )}
       </section>
 
+      <WeekSchedule />
+
       <section className="summary__section">
         <h2 className="section-title">
-          <IconSparkle size={18} /> {COACH_NAME} rekommenderar
+          <IconSparkle size={18} /> {COACH_NAME} rekommenderar just nu
           {recommendations.length > 1 ? ` (${recommendations.length} steg)` : ''}
         </h2>
         <div className="coach-recs">

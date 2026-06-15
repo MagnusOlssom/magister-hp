@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   profile: `${PREFIX}profile`,
   theme: `${PREFIX}theme`,
   schedule: `${PREFIX}schedule`,
+  social: `${PREFIX}social`,
 } as const;
 
 export function loadFromStorage<T>(key: string, fallback: T): T {

@@ -172,3 +172,42 @@ export const IconCalendar = (p: IconProps) => (
     <path d="M3.5 9.5h17M8 3v4M16 3v4" />
   </svg>
 );
+
+export const IconChat = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H9l-4 3.5V16.5H4A1.5 1.5 0 0 1 2.5 15V7A1.5 1.5 0 0 1 4 5.5z" />
+  </svg>
+);
+
+export const IconComment = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <path d="M21 11.5a7.5 7.5 0 0 1-10.9 6.7L4 20l1.8-5A7.5 7.5 0 1 1 21 11.5z" />
+  </svg>
+);
+
+export const IconHeart = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <path d="M12 20s-7-4.4-9.3-9C1.3 8.4 2.6 5.5 5.5 5.5c1.9 0 3.2 1.1 3.9 2.3l.6 1 .6-1c.7-1.2 2-2.3 3.9-2.3 2.9 0 4.2 2.9 2.8 5.5C19 15.6 12 20 12 20z" />
+  </svg>
+);
+
+export const IconEye = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+export const IconSend = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <path d="M21 3 10.5 13.5M21 3l-6.5 18-4-8-8-4z" />
+  </svg>
+);
+
+export const IconUsers = (p: IconProps) => (
+  <svg {...svgProps(p)}>
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M3.5 20c0-3.3 2.5-5.3 5.5-5.3s5.5 2 5.5 5.3" />
+    <path d="M16 5.2a3.2 3.2 0 0 1 0 5.9M17.5 14.8c2 .5 3.5 2.2 3.5 5.2" />
+  </svg>
+);

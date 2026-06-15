@@ -3,10 +3,14 @@ import Layout from './components/Layout';
 import Onboarding from './components/Onboarding';
 import { AppProvider, useApp } from './context/AppContext';
 import AnalysisPage from './pages/AnalysisPage';
+import ChatRoomPage from './pages/ChatRoomPage';
 import Dashboard from './pages/Dashboard';
+import DiscussionAreaPage from './pages/DiscussionAreaPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
+import SocialPage from './pages/SocialPage';
 import StatisticsPage from './pages/StatisticsPage';
+import ThreadPage from './pages/ThreadPage';
 import TrainPage from './pages/TrainPage';
 
 function AppRoutes() {
@@ -18,6 +22,10 @@ function AppRoutes() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/trana" element={<TrainPage />} />
         <Route path="/analys" element={<AnalysisPage />} />
+        <Route path="/social" element={<SocialPage />} />
+        <Route path="/social/d/:areaId" element={<DiscussionAreaPage />} />
+        <Route path="/social/d/:areaId/:threadId" element={<ThreadPage />} />
+        <Route path="/social/chat/:roomId" element={<ChatRoomPage />} />
         <Route path="/historik" element={<HistoryPage />} />
         <Route path="/statistik" element={<StatisticsPage />} />
         <Route path="/profil" element={<ProfilePage />} />

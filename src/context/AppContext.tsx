@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { Profile, SessionRecord, Theme } from '../types';
+import { resetSocial } from '../utils/socialStore';
 import { loadFromStorage, removeFromStorage, saveToStorage, STORAGE_KEYS } from '../utils/storage';
 
 const DEFAULT_PROFILE: Profile = {
@@ -79,6 +80,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     removeFromStorage(STORAGE_KEYS.sessions);
     removeFromStorage(STORAGE_KEYS.profile);
     removeFromStorage(STORAGE_KEYS.schedule);
+    resetSocial();
   }, []);
 
   const toggleTheme = useCallback(() => {

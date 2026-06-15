@@ -28,6 +28,20 @@ export function formatClock(totalSec: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
+/** ISO-datum -> "nyss", "5 min sedan", "3 tim sedan", "2 dgr sedan", annars datum. */
+export function formatRelative(iso: string, now: number = Date.now()): string {
+  const t = new Date(iso).getTime();
+  if (Number.isNaN(t)) return '–';
+  const diffMin = Math.round((now - t) / 60_000);
+  if (diffMin < 1) return 'nyss';
+  if (diffMin < 60) return `${diffMin} min sedan`;
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return `${diffH} tim sedan`;
+  const diffD = Math.floor(diffH / 24);
+  if (diffD < 7) return `${diffD} ${diffD === 1 ? 'dag' : 'dgr'} sedan`;
+  return formatDateTime(iso);
+}
+
 /** ISO-datum -> "11 juni 14:32" (med år om det inte är innevarande år). */
 export function formatDateTime(iso: string): string {
   const date = new Date(iso);

@@ -111,3 +111,73 @@ export interface Profile {
 }
 
 export type Theme = 'light' | 'dark';
+
+// ---------------------------------------------------------------- Social
+
+export interface SocialUser {
+  id: string;
+  name: string;
+  faculty?: FacultyId;
+  /** dataURL om satt (annars visas initialer). */
+  avatar?: string;
+}
+
+export interface SocialComment {
+  id: string;
+  authorId: string;
+  body: string;
+  createdAt: string; // ISO
+}
+
+export interface FeedPost {
+  id: string;
+  authorId: string;
+  body: string;
+  createdAt: string;
+  likeCount: number;
+  likedByMe: boolean;
+  comments: SocialComment[];
+}
+
+export interface DiscussionArea {
+  id: string;
+  name: string;
+  description: string;
+  emoji: string;
+}
+
+export interface DiscussionThread {
+  id: string;
+  areaId: string;
+  authorId: string;
+  title: string;
+  body: string;
+  createdAt: string;
+  views: number;
+  comments: SocialComment[];
+  lastActivityAt: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  authorId: string;
+  body: string;
+  createdAt: string;
+}
+
+export interface ChatRoom {
+  id: string;
+  name: string;
+  topic: string;
+  onlineCount: number;
+  messages: ChatMessage[];
+}
+
+export interface SocialState {
+  version: number;
+  users: Record<string, SocialUser>;
+  posts: FeedPost[]; // nyast först
+  areas: DiscussionArea[];
+  threads: DiscussionThread[];
+  chatRooms: ChatRoom[];
+}
